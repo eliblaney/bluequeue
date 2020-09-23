@@ -1,9 +1,12 @@
 $primary-color: #0054A6;
 $secondary-color: #002E6D;
+$text-color: #555555;
+$text-inverse-color: #ffffff;
 $font-stack: 'Open Sans', Arial, sans-serif;
+$fancy-fonts: 'Frank Ruhl Libre', Times, Georgia, serif;
 
 body {
-	color: #555555;
+	color: $text-color;
 	font-size: 16px;
 	line-height: 1.428571429;
 	font-family: $font-stack;
@@ -11,18 +14,67 @@ body {
 
 .cu-bg {
 	background-color: $primary-color;
+
+	h1, h2, h3, h4, h5, h6, p {
+		color: $text-inverse-color;
+	}
 }
 
-h1, h2, h3, h4, h5, h6, .cu-tint {
-	color: #0054a6;
+.cu-heading {
+	@extend .cu-bg;
+	padding: 12px 15px;
+	color: #ffffff;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.cu-tint {
+	color: $primary-color;
+}
+
+%header-text {
+	font-family: $fancy-fonts;
+	line-height: 1.3;
+	margin: 20px auto;
+}
+
+h1, h2 {
+	@extend %header-text;
+	color: $primary-color;
+}
+
+h3, h4, h5, h6 {
+	@extend %header-text;
+	color: $secondary-color;
 }
 
 .cu-border-top {
 	border-top: 5px solid $secondary-color;
 }
 
-
-.cu-heading {
+a.btn {
+	background-color: $secondary-color;
+	border-color: $secondary-color;
+	color: $text-inverse-color;
 	padding: 12px 15px;
-	color: #ffffff;
+}
+
+/* Tablets and larger */
+@media only screen and (min-width : 768px) {
+
+	.main-content {
+		margin: auto 15%;
+	}
+
+}
+
+/* Devices smaller than tablets */
+@media only screen and (max-width : 767px) {
+
+	.main-content {
+		margin: auto 20px;
+	}
+
 }
