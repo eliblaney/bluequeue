@@ -1,4 +1,4 @@
-# KFC Reservations
+# BlueQueue
 
 Created by Gisselle Estevez & Eli Blaney as a final project for CSC 551 (Web Programming) at Creighton University.
 
