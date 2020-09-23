@@ -1,0 +1,54 @@
+#!/bin/bash
+
+watch=false
+while getopts ":hw" opt; do
+	case ${opt} in
+		h)
+			echo
+			echo "Usage: ./sass [-hw]"
+			echo "  -h     Display this help message."
+			echo "  -w     Enable watch mode."
+			echo
+			echo "Default behavior: Compile SCSS to CSS"
+			echo
+			exit 0
+			;;
+		w)
+			watch=true
+			;;
+	esac
+done
+shift $((OPTIND -1))
+
+if ! command -v sass &> /dev/null
+then
+	echo "Warning: Sass could not be found."
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		if ! command -v brew &> /dev/null
+		then
+			echo "Error: Please install Sass and/or Homebrew. https://sass-lang.com"
+			exit 1
+		else
+			echo "Installing Sass..."
+			brew install sass/sass/sass
+		fi
+	else
+		echo "Error: Please install Sass. https://sass-lang.com"
+		exit 1
+	fi
+fi
+
+if [ ! -d assets/scss ]; then
+  mkdir -p assets/scss
+fi
+
+if [ ! -d assets/css ]; then
+  mkdir -p assets/css
+fi
+
+if [[ "${watch}" = true ]]; then
+	sass --watch assets/scss:assets/css
+else
+	echo "Compiling..."
+	sass assets/scss:assets/css && echo "Finished successfully."
+fi

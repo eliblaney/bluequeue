@@ -161,3 +161,5 @@ modules.xml
 # Sonarlint plugin
 
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm+all,webstorm+all,web
+
+assets/css

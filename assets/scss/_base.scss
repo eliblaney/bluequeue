@@ -1,0 +1,28 @@
+$primary-color: #0054A6;
+$secondary-color: #002E6D;
+$font-stack: 'Open Sans', Arial, sans-serif;
+
+body {
+	color: #555555;
+	font-size: 16px;
+	line-height: 1.428571429;
+	font-family: $font-stack;
+}
+
+.cu-bg {
+	background-color: $primary-color;
+}
+
+h1, h2, h3, h4, h5, h6, .cu-tint {
+	color: #0054a6;
+}
+
+.cu-border-top {
+	border-top: 5px solid $secondary-color;
+}
+
+
+.cu-heading {
+	padding: 12px 15px;
+	color: #ffffff;
+}
