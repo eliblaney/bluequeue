@@ -4,12 +4,22 @@ $text-color: #555555;
 $text-inverse-color: #ffffff;
 $font-stack: 'Open Sans', Arial, sans-serif;
 $fancy-fonts: 'Frank Ruhl Libre', Times, Georgia, serif;
+$link-color: rgb(255, 205, 81);
 
 body {
 	color: $text-color;
 	font-size: 16px;
 	line-height: 1.428571429;
 	font-family: $font-stack;
+}
+
+a {
+	color: $link-color;
+
+	&:hover {
+		color: $link-color;
+		text-decoration: none;
+	}
 }
 
 .cu-bg {
@@ -22,16 +32,12 @@ body {
 
 .cu-heading {
 	@extend .cu-bg;
-	padding: 12px 15px;
+	padding: 12px 25px;
 	color: #ffffff;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-}
-
-.cu-tint {
-	color: $primary-color;
 }
 
 %header-text {
@@ -52,6 +58,10 @@ h3, h4, h5, h6 {
 
 .cu-border-top {
 	border-top: 5px solid $secondary-color;
+}
+
+.cu-border-bottom {
+	border-bottom: 5px solid $secondary-color;
 }
 
 a.btn {
@@ -79,8 +89,16 @@ a.btn {
 
 }
 
-#logo {
+.logo {
 	height: 60px;
 	width: auto;
 	margin: 20px;
+}
+
+.links a {
+	padding: 0 10px;
+
+	&+a {
+		border-left: 1px solid $link-color;
+	}
 }
