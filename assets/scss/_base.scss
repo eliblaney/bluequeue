@@ -78,6 +78,15 @@ a.btn {
 		margin: auto 15%;
 	}
 
+
+	.links a {
+		padding: 0 10px;
+
+		&+a {
+			border-left: 1px solid $link-color;
+		}
+	}
+
 }
 
 /* Devices smaller than tablets */
@@ -87,18 +96,14 @@ a.btn {
 		margin: auto 20px;
 	}
 
+	.links a {
+		display: block;
+	}
+
 }
 
 .logo {
 	height: 60px;
 	width: auto;
 	margin: 20px;
-}
-
-.links a {
-	padding: 0 10px;
-
-	&+a {
-		border-left: 1px solid $link-color;
-	}
 }
