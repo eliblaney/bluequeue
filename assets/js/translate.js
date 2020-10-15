@@ -1,6 +1,7 @@
 // Translates home page English/Spanish
 
-const lang = {
+var lang = {
+	// English
 	'en': {
 		'login': 'Log in',
 		'title': 'BlueQueue',
@@ -12,7 +13,7 @@ const lang = {
 		'lapsmi': 'laps/mi',
 		'card1title': 'Do More.',
 		'card1text': 'Reserve a time slot, and keep people safe.',
-		'card2title': 'Learn More.'
+		'card2title': 'Learn More.',
 		'card1button': 'Make Reservation',
 		'card2text': 'Find out more about the KFC and what you can do to help.',
 		'card2button': 'Read More',
@@ -34,8 +35,10 @@ const lang = {
 		'home': 'Home',
 		'about': 'About',
 		'reserve': 'Reserve',
-		'admin': 'Administration'
+		'admin': 'Administration',
+		'translate': 'Español'
 	},
+	// Spanish
 	'es': {
 		'login': 'Log in',
 		'title': 'BlueQueue',
@@ -47,7 +50,7 @@ const lang = {
 		'lapsmi': 'laps/mi',
 		'card1title': 'Do More.',
 		'card1text': 'Reserve a time slot, and keep people safe.',
-		'card2title': 'Learn More.'
+		'card2title': 'Learn More.',
 		'card1button': 'Make Reservation',
 		'card2text': 'Find out more about the KFC and what you can do to help.',
 		'card2button': 'Read More',
@@ -69,8 +72,28 @@ const lang = {
 		'home': 'Home',
 		'about': 'About',
 		'reserve': 'Reserve',
-		'admin': 'Administration'
+		'admin': 'Administration',
+		'translate': 'English'
 	}
 };
+var translateIndex = 0;
 
+var textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'li', 'span'];
 
+window.translate = function(langCode) {
+	if(langCode === undefined) {
+		var keys = Object.keys(lang);
+		translateIndex = (translateIndex + 1) % keys.length;
+		langCode = keys[translateIndex];
+	}
+	for(var i in textTags) {
+		var t = textTags[i];
+		var els = document.getElementsByTagName(t);
+		for(var j in els) {
+			var el = els[j];
+			if(el.dataset && el.dataset.tln) {
+				el.innerHTML = lang[langCode][el.dataset.tln];
+			}
+		}
+	}
+}
