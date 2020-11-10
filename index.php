@@ -139,7 +139,13 @@ if($user) {
 					<a href="index.php" data-tln="home">Home</a>
 					<a href="about.php" data-tln="about">About</a>
 					<a href="reserve.php" data-tln="reserve">Reserve</a>
-					<a href="login.php?redirect=" data-tln="admin">Administration</a>
+<?php
+if($user && $user['admin']) {
+?>
+					<a href="admin.php">Administration</a>
+<?php
+}
+?>
 				</div>
 			</div>
 		</div>

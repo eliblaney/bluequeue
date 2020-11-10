@@ -39,7 +39,7 @@ if(isset($_POST['submit'])) {
 		echo $hash."<br>";
 		echo $row['password'];
 		if(password_verify($_POST['password'], $row['password'])) {
-			$q = "SELECT first_name, last_name, email, active, create_date, phone, dob, netid, admin, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
+			$q = "SELECT * FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
 			$result = mysqli_query($conn, $q);
 
 			if(mysqli_num_rows($result) > 0) {
@@ -114,7 +114,13 @@ if($invalid_login) {
 					<a href="index.php">Home</a>
 					<a href="about.php">About</a>
 					<a href="reserve.php">Reserve</a>
-					<a href="#">Administration</a>
+<?php
+if($user && $user['admin']) {
+?>
+					<a href="admin.php">Administration</a>
+<?php
+}
+?>
 				</div>
 			</div>
 		</div>

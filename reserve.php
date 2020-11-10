@@ -56,7 +56,13 @@ if($user) {
 					<a href="index.php">Home</a>
 					<a href="about.php">About</a>
 					<a href="reserve.php">Reserve</a>
+<?php
+if($user && $user['admin']) {
+?>
 					<a href="admin.php">Administration</a>
+<?php
+}
+?>
 				</div>
 			</div>
 		</div>
