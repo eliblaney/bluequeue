@@ -1,3 +1,66 @@
+<?php
+session_start();
+
+function redirectAuth($follow = true, $default_redirect = "index.html") {
+	$redirect = $default_redirect;
+	if($follow && isset($_GET['redirect'])) {
+		// Prevent redirecting to malicious sites
+		$redirect = trim(preg_replace("(https?:\/\/|www\.)", "", $_GET['redirect']));
+		if(!$redirect) {
+			$redirect = $default_redirect;
+		}
+	}
+	header("Location: $redirect");
+	die("You are being redirected... Please <a href='$redirect'>click here</a> if you are not redirected in 5 seconds");
+}
+
+if(isset($_SESSION['user'])) {
+	if(isset($_GET['logout']) && $_GET['logout']) {
+		unset($_SESSION['user']);
+	}
+	redirectAuth(false);
+}
+
+$invalid_login = false;
+if(isset($_POST['submit'])) {
+	require('db.php');
+	$conn = connectDB();
+
+	$netid = strtoupper(mysqli_real_escape_string($conn, $_POST['netid']));
+
+	$q = "SELECT id, password FROM login WHERE netid='$netid'";
+	$result = mysqli_query($conn, $q);
+
+	if(mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+		$login_id = $row['id'];
+		
+		echo $hash."<br>";
+		echo $row['password'];
+		if(password_verify($_POST['password'], $row['password'])) {
+			$q = "SELECT first_name, last_name, email, active, create_date, phone, dob, netid, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
+			$result = mysqli_query($conn, $q);
+
+			if(mysqli_num_rows($result) > 0) {
+				$row = mysqli_fetch_assoc($result);
+				$_SESSION['user'] = $row;
+				redirectAuth();
+			} else {
+				// Couldn't find customer for user???
+				$invalid_login = true;
+			}
+		} else {
+			$invalid_login = true;
+			echo "INVALID";
+		}
+	} else {
+		$invalid_login = true;
+		echo "NOT FOUND";
+	}
+
+	mysqli_close($conn);
+}
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -25,9 +88,16 @@
 			<div class="main-content">
 				<form class="userform" action="" method="POST">
 					<h3>Log in</h3>
+<?php
+if($invalid_login) {
+?>
+					<p class="error">Your Net ID or password is incorrect. Please try again.</p>
+<?php
+}
+?>
 					<input name="netid" type="text" placeholder="Net ID" class="form-control m-3" pattern="[A-Za-z]{3}\d{5}(@creighton.edu)?" required />
-					<input name="password" type="password" placeholder="Password" class="form-control m-2" minlength="8" required />
-					<input type="submit" class="btn btn-primary m-3" />
+					<input name="password" type="password" placeholder="Password" class="form-control m-2" minlength="6" required />
+					<input name="submit" type="submit" class="btn btn-primary m-3" />
 				</form>
 			</div>
 			<!-- end main content -->
