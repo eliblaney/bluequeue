@@ -39,7 +39,7 @@ if(isset($_POST['submit'])) {
 		echo $hash."<br>";
 		echo $row['password'];
 		if(password_verify($_POST['password'], $row['password'])) {
-			$q = "SELECT * FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
+			$q = "SELECT customer_id, first_name, last_name, email, active, create_date, phone, dob, id, uuid, netid, admin, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
 			$result = mysqli_query($conn, $q);
 
 			if(mysqli_num_rows($result) > 0) {
