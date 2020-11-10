@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		<title>About BlueQueue</title>
+		<title>Log In</title>
 		<meta name="description" content="Reserve KFC times and more with BlueQueue!">
 		<meta name="author" content="Eli Blaney & Gisselle Estevez">
 
@@ -14,7 +14,7 @@
 
 	</head>
 	<body>
-		<div class="container-fluid p-0 mb-5">
+		<div class="container-fluid p-0">
 			<div class="cu-heading cu-border-top">
 				<img id="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="nav-buttons">
@@ -25,8 +25,8 @@
 			<div class="main-content">
 				<form class="userform" action="" method="POST">
 					<h3>Log in</h3>
-					<input name="netid" type="text" placeholder="Net ID" class="form-control m-3" />
-					<input name="password" type="password" placeholder="Password" class="form-control m-2" />
+					<input name="netid" type="text" placeholder="Net ID" class="form-control m-3" pattern="[A-Za-z]{3}\d{5}(@creighton.edu)?" required />
+					<input name="password" type="password" placeholder="Password" class="form-control m-2" minlength="8" required />
 					<input type="submit" class="btn btn-primary m-3" />
 				</form>
 			</div>
