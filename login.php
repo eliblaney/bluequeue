@@ -1,7 +1,8 @@
 <?php
 session_start();
+define('BLUEQUEUE');
 
-function redirectAuth($follow = true, $default_redirect = "index.html") {
+function redirectAuth($follow = true, $default_redirect = "index.php") {
 	$redirect = $default_redirect;
 	if($follow && isset($_GET['redirect'])) {
 		// Prevent redirecting to malicious sites
@@ -38,24 +39,30 @@ if(isset($_POST['submit'])) {
 		echo $hash."<br>";
 		echo $row['password'];
 		if(password_verify($_POST['password'], $row['password'])) {
-			$q = "SELECT first_name, last_name, email, active, create_date, phone, dob, netid, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
+			$q = "SELECT first_name, last_name, email, active, create_date, phone, dob, netid, admin, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
 			$result = mysqli_query($conn, $q);
 
 			if(mysqli_num_rows($result) > 0) {
 				$row = mysqli_fetch_assoc($result);
+
+				// Convert MySQL tinyints to PHP booleans
+				$row['active'] = !strcmp($row['active'], '1');
+				$row['admin'] = !strcmp($row['admin'], '1');
+
+				// Set user session and redirect
 				$_SESSION['user'] = $row;
 				redirectAuth();
 			} else {
-				// Couldn't find customer for user???
+				// Error: Couldn't find customer for user
 				$invalid_login = true;
 			}
 		} else {
+			// Error: Invalid password
 			$invalid_login = true;
-			echo "INVALID";
 		}
 	} else {
+		// Error: Invalid Net ID
 		$invalid_login = true;
-		echo "NOT FOUND";
 	}
 
 	mysqli_close($conn);
@@ -81,7 +88,7 @@ if(isset($_POST['submit'])) {
 			<div class="cu-heading cu-border-top">
 				<img id="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="nav-buttons">
-					<a href="index.html" class="btn btn-primary">Home</a>
+					<a href="index.php" class="btn btn-primary">Home</a>
 				</div>
 			</div>
 
@@ -104,9 +111,9 @@ if($invalid_login) {
 			<div class="cu-heading cu-border-bottom">
 				<img class="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="links ml-5">
-					<a href="index.html">Home</a>
-					<a href="about.html">About</a>
-					<a href="reserve.html">Reserve</a>
+					<a href="index.php">Home</a>
+					<a href="about.php">About</a>
+					<a href="reserve.php">Reserve</a>
 					<a href="#">Administration</a>
 				</div>
 			</div>

@@ -4,6 +4,7 @@ var lang = {
 	// English
 	'en': {
 		'login': 'Log in',
+		'logout': 'Log out',
 		'title': 'BlueQueue',
 		'subtitle': 'Play, work, achieve.',
 		'reservenow': 'Reserve Now',
@@ -41,6 +42,7 @@ var lang = {
 	// Spanish
 	'es': {
 		'login': 'Iniciar sesión',
+		'logout': 'Cerrar sesión',
 		'title': 'BlueQueue',
 		'subtitle': 'Jugar, hacer ejercicio, lograr.',
 		'reservenow': 'Reservar Ahora',

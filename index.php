@@ -1,5 +1,14 @@
-<!DOCTYPE html>
+<?php
+session_start();
+define('BLUEQUEUE');
 
+$user = null;
+if(isset($_SESSION['user'])) {
+	$user = $_SESSION['user'];
+}
+
+?>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -18,14 +27,24 @@
 				<img class="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="nav-buttons">
 					<a href="#" onclick="window.translate()" class="btn btn-primary" data-tln="translate">Español</a>
-					<a href="login.php" class="btn btn-primary" data-tln="login">Log in</a>
+<?php
+if($user) {
+?>
+					<a href="login.php?logout=true" class="btn btn-primary" data-tln="logout">Log out</a>
+<?php
+} else {
+?>
+					<a href="reserve.php" class="btn btn-primary" data-tln="login">Log in</a>
+<?php
+}
+?>
 				</div>
 			</div>
 
 			<div class="intro row">
 				<h1 data-tln="title">BlueQueue</h1>
 				<p data-tln="subtitle">Play, work, achieve.</p>
-				<a href="reserve.html" class="btn btn-primary" data-tln="reservenow">Reserve Now</a>
+				<a href="reserve.php" class="btn btn-primary" data-tln="reservenow">Reserve Now</a>
 			</div>
 
 			<div class="main-content">
@@ -44,7 +63,7 @@
 					<div class="col-md card card-light spaced">
 						<h3 class="timer mb-0" data-to="6.5" data-speed="1500"></h3>
 						<p class="muted centered" data-tln="lapsmi">laps/mi</p>
-						<p class="centered" data-tln="threelane">Three-lane running track</p>
+						<p class="centered" data-tln="desc11">Three-lane running track</p>
 					</div>
 				</div>
 
@@ -55,7 +74,7 @@
 							<p data-tln="card1text">
 								Reserve a time slot, and keep people safe.
 							</p>
-							<a href="reserve.html" class="btn btn-primary" data-tln="card1button">Make Reservation</a>
+							<a href="reserve.php" class="btn btn-primary" data-tln="card1button">Make Reservation</a>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -64,7 +83,7 @@
 							<p data-tln="card2text">
 								Find out more about the KFC and what you can do to help.
 							</p>
-							<a href="about.html" class="btn btn-primary" data-tln="card2button">Read More</a>
+							<a href="about.php" class="btn btn-primary" data-tln="card2button">Read More</a>
 						</div>
 					</div>
 				</div>
@@ -117,9 +136,9 @@
 			<div class="cu-heading cu-border-bottom">
 				<img class="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="links ml-5">
-					<a href="index.html" data-tln="home">Home</a>
-					<a href="about.html" data-tln="about">About</a>
-					<a href="reserve.html" data-tln="reserve">Reserve</a>
+					<a href="index.php" data-tln="home">Home</a>
+					<a href="about.php" data-tln="about">About</a>
+					<a href="reserve.php" data-tln="reserve">Reserve</a>
 					<a href="login.php?redirect=" data-tln="admin">Administration</a>
 				</div>
 			</div>

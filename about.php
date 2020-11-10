@@ -1,5 +1,14 @@
-<!DOCTYPE html>
+<?php
+session_start();
+define('BLUEQUEUE');
 
+$user = null;
+if(isset($_SESSION['user'])) {
+	$user = $_SESSION['user'];
+}
+
+?>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -18,8 +27,18 @@
 			<div class="cu-heading cu-border-top">
 				<img id="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="nav-buttons">
-					<a href="index.html" class="btn btn-primary">Home</a>
-					<a href="login.php" class="btn btn-primary">Log in</a>
+					<a href="index.php" class="btn btn-primary">Home</a>
+<?php
+if($user) {
+?>
+					<a href="login.php?logout=true" class="btn btn-primary" data-tln="logout">Log out</a>
+<?php
+} else {
+?>
+					<a href="reserve.php" class="btn btn-primary" data-tln="login">Log in</a>
+<?php
+}
+?>
 				</div>
 			</div>
 
@@ -40,17 +59,17 @@
 					<p>
 				</div>
 				<div class="m-3 centered">
-					<a href="reserve.html" class="btn btn-primary">Make Reservation</a>
+					<a href="reserve.php" class="btn btn-primary">Make Reservation</a>
 				</div>
 			</div>
 
 			<div class="cu-heading cu-border-bottom">
 				<img class="logo" src="assets/img/logo.png" alt="Creighton Logo">
 				<div class="links ml-5">
-					<a href="index.html">Home</a>
-					<a href="about.html">About</a>
-					<a href="reserve.html">Reserve</a>
-					<a href="login.php?redirect=">Administration</a>
+					<a href="index.php">Home</a>
+					<a href="about.php">About</a>
+					<a href="reserve.php">Reserve</a>
+					<a href="admin.php">Administration</a>
 				</div>
 			</div>
 		</div>

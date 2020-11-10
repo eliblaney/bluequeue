@@ -1,4 +1,5 @@
 <?php
+defined('BLUEQUEUE') or header('Location: index.php');
 
 function connectDB(){
 	$dbConnection = mysqli_connect("127.0.0.1", "u301528007_bluequeue", "BlueQueue551", "u301528007_bluequeue");
