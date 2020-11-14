@@ -43,12 +43,31 @@
     <title></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/css/reserve.css?v=1.0.1">
   </head>
 
   <body>
     <div class="container">
-        <h1 class="text-center">Reservation for Date: <?php echo date('F d/Y', strtotime($date)); ?></h1><hr>
+      <div class="cu-heading cu-border-top">
+				<img id="logo" src="assets/img/logo.png" alt="Creighton Logo">
+				<div class="nav-buttons">
+					<a href="index.php" class="btn btn-primary">Home</a>
+            <?php
+            if($user) {
+            ?>
+            					<a href="login.php?logout=true" class="btn btn-primary" data-tln="logout">Log out</a>
+            <?php
+            } else {
+            ?>
+            					<a href="reserve.php" class="btn btn-primary" data-tln="login">Log in</a>
+            <?php
+            }
+            ?>
+				</div>
+			</div>
+        <h1 class="text-center" >Reservation for Date: <?php echo date('F d/Y', strtotime($date)); ?></h1><hr>
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                <?php echo isset($msg)?$msg:''; ?>
@@ -75,10 +94,26 @@
                     </div>
                     <button class="btn btn-primary" type="submit" name="submit">Submit</button><br>
                     <a href="reserve.php" class="btn" role="button">Back</a>
-                    <a href="index.php" class="btn btn-default" role="button">Home</a>
+                    <a href="index.php" class="btn" role="button">Home</a>
                 </form>
             </div>
         </div>
+    </div>
+
+    <div class="cu-heading cu-border-bottom">
+      <img class="logo" src="assets/img/logo.png" alt="Creighton Logo">
+      <div class="links ml-5">
+        <a href="index.php">Home</a>
+        <a href="about.php">About</a>
+        <a href="reserve.php">Reserve</a>
+          <?php
+          if($user && $user['admin']) {
+          ?>
+                  <a href="admin.php">Administration</a>
+          <?php
+          }
+          ?>
+      </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
