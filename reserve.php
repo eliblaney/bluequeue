@@ -12,6 +12,20 @@ $user = $_SESSION['user'];
 
 <?php
 function build_calendar($month,$year){
+	$mysqli = new mysqli('127.0.0.1', 'u301528007_bluequeue', 'BlueQueue551', 'u301528007_bluequeue');
+	$stmt=$mysqli->prepare("SELECT * FROM appointment WHERE MONTH(appointment_date) = ? AND YEAR(appointment_date) = ?");
+	$stmt->bind_param('ss',$month,$year);
+	$reservations = array();
+	if($stmt->execute()){
+		$result = $stmt->get_result();
+		if($result->num_rows>0){
+			while($row = $result->fetch_assoc()){
+				$reservations[] = $row['appointment_date'];
+			}
+			$stmt->close();
+		}
+	}
+
 	//Array containing names of all the days in a week
 	$daysOfWeek=array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
 	//Get the first day of the month, that's an argument of this function
@@ -73,10 +87,16 @@ function build_calendar($month,$year){
 		$currentDayRel=str_pad($month,2,"0",STR_PAD_LEFT);
 		$date="$year-$month-$currentDayRel";
 
-		if($dateToday==$date){
-			$calendar.="<td class='today'><h4>$currentDay</h4>";
-		} else{
-			$calendar.="<td><h4>$currentDay</h4>";
+		$dayname = strtolower(date('l',strtotime($date)));
+		$eventNum=0;
+		$today = $date == date('Y-m-d')?"today":"";
+		if($date<date('Y-m-d')){
+			$calendar.="<td><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>Not Available</button>";
+		}elseif(in_array($date,$reservations)){
+			$calendar.="<td><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>Already Reserved</button>";
+		}
+		else{
+			$calendar.="<td class='$today'><h4>$currentDay</h4> <a href='appointment.php?date=".$date."' class='btn btn-sucess btn-xs'>Reserve</a>";
 		}
 
 
