@@ -84,12 +84,12 @@ function build_calendar($month,$year){
 			$calendar.="</tr><tr>";
 		}
 
-		$currentDayRel=str_pad($month,2,"0",STR_PAD_LEFT);
+		$currentDayRel=str_pad($currentDay,2,"0",STR_PAD_LEFT);
 		$date="$year-$month-$currentDayRel";
 
 		$dayname = strtolower(date('l',strtotime($date)));
 		$eventNum=0;
-		$today = $date == date('Y-m-d')?"today":"";
+		$today = $date==date('Y-m-d')? "today" : "";
 		if($date<date('Y-m-d')){
 			$calendar.="<td><h4>$currentDay</h4> <button class='btn btn-danger btn-xs'>Not Available</button>";
 		}elseif(in_array($date,$reservations)){

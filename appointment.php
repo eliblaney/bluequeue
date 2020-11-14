@@ -73,7 +73,9 @@
                         <label for="">Courts (1- Basketball | 2- Volleyball)</label>
                         <input type="number" class="form-control" name="court" min="1" max="2">
                     </div>
-                    <button class="btn btn-primary" type="submit" name="submit">Submit</button>
+                    <button class="btn btn-primary" type="submit" name="submit">Submit</button><br>
+                    <a href="reserve.php" class="btn" role="button">Back</a>
+                    <a href="index.php" class="btn btn-default" role="button">Home</a>
                 </form>
             </div>
         </div>
