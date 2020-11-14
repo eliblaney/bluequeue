@@ -18,30 +18,21 @@
       $start = $_POST['start-time'];
       $end = $_POST['end-time'];
       $facility = $_POST['facility'];
-      $court = $_POST['court'];
-      $classes = $_POST['classes'];
+      $court = $_POST['court'] || 'NULL';
+      $classes = $_POST['classes'] || 'NULL';
       //Update with Database Connection
       $mysqli = new mysqli('127.0.0.1', 'u301528007_bluequeue', 'BlueQueue551', 'u301528007_bluequeue');
       $stmt = $mysqli->prepare("INSERT INTO appointment (appointment_date, appointment_start_time, appointment_end_time, customer_id, facility_id, class_id, court_id) VALUES (?,?,?,?,?,?,?)");
-      $stmt->bind_param('sss', $date, $start, $end, $user_id,$facility,$classes,$court);
+      $stmt->bind_param('sssiiii', $date, $start, $end, $user_id,$facility,$classes,$court);
       $stmt->execute();
-      $msg = "<div class='alert alert-success'>Booking Successfull</div>";
+      $msg = "<div class='alert alert-success'>Booking Successful</div>";
       $stmt->close();
       $mysqli->close();
   }
 
  ?>
 
-//INSERT
-// Pass appointment_date
-// Choose appointment_start_time
-// Choose appointment_end_time
-// Pass customer_id
-// Choose facility_id
-// Optional: class_id
-// Optional: court_id
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
   <head>

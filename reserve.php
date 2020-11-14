@@ -45,13 +45,13 @@ function build_calendar($month,$year){
 	$calendar="<table class='table table-bordered'>";
 	$calendar.="<center><h2>$monthName $year</h2>";
 	//Previos Month
-	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m',mktime(0,0,0,$month-1,1,$year))."&year="date('Y',mktime(0,0,0,$month-1,1,$year))."'>Previous Month</a> ";
+	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m',mktime(0,0,0,$month-1,1,$year))."&year=".date('Y',mktime(0,0,0,$month-1,1,$year))."'>Previous Month</a> ";
 
 	//Current Month
-	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m')."&year="date('Y')."'>Current Month</a> ";
+	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m')."&year=".date('Y')."'>Current Month</a> ";
 
 	//Next Month
-	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m',mktime(0,0,0,$month+1,1,$year))."&year="date('Y',mktime(0,0,0,$month+1,1,$year))."'>Next Month</a></center><br>";
+	$calendar.="<a class='btn btn-xs btn-primary' href='?month=".date('m',mktime(0,0,0,$month+1,1,$year))."&year=".date('Y',mktime(0,0,0,$month+1,1,$year))."'>Next Month</a></center><br>";
 
 
 
@@ -115,6 +115,7 @@ function build_calendar($month,$year){
 	}
 	$calendar.="</tr>";
 	$calendar.="</table>";
+	return $calendar;
 	}
 ?>
 
@@ -174,11 +175,14 @@ if($user) {
 				<h1>Make Reservation</h1>
 
 				<?php
-					echo $calendar;
 
+					$month = $_GET['month'];
+					$year = $_GET['year'];
+					if(!isset($_GET['month']) || !isset($_GET['year'])) {
 					$dateComponents=getdate();
 					$month=$dateComponents['mon'];
 					$year=$dateComponents['year'];
+					}
 					echo build_calendar($month,$year);
 				?>
 
