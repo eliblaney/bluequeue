@@ -22,8 +22,8 @@ function build_calendar($month,$year){
 			while($row = $result->fetch_assoc()){
 				$reservations[] = $row['appointment_date'];
 			}
-			$stmt->close();
 		}
+		$stmt->close();
 	}
 
 	//Array containing names of all the days in a week
