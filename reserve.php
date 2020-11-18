@@ -1,8 +1,9 @@
 <?php
-//Check to see if user it's logged in. If not pop a link to do so
+// Start session and check user's session
 session_start();
-define('BLUEQUEUE');
+define('BLUEQUEUE', true);
 
+// Redirect to login if not logged in
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php?redirect=reserve.php');
 	die('Please <a href="login.php?redirect=reserve.php">click here</a> to log in.');
@@ -137,7 +138,7 @@ function build_calendar($month,$year){
 		<!--Bootstrap Links-->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 		<!--CSS stylesheet link to reserve.css-->
 		<link rel="stylesheet" href="assets/css/reserve.css?v=1.0.1">
 
@@ -167,14 +168,16 @@ function build_calendar($month,$year){
 				<!-- Main content -->
 				<h1>Make Reservation</h1>
 
-				<?php // Get values + call build_calendar
+				<?php
+					// Get values + call build_calendar
 					$month = $_GET['month'];
 					$year = $_GET['year'];
 					if(!isset($_GET['month']) || !isset($_GET['year'])) {
-					$dateComponents=getdate();
-					$month=$dateComponents['mon'];
-					$year=$dateComponents['year'];
+						$dateComponents=getdate();
+						$month=$dateComponents['mon'];
+						$year=$dateComponents['year'];
 					}
+					// Print the calendar on the page
 					echo build_calendar($month,$year);
 				?>
 
@@ -188,13 +191,13 @@ function build_calendar($month,$year){
 					<a href="index.php">Home</a>
 					<a href="about.php">About</a>
 					<a href="reserve.php">Reserve</a>
-					<?php // If the user is an Admin show the admin link at the bottom of the page
-					if($user && $user['admin']) {
-					?>
-										<a href="admin.php">Administration</a>
-					<?php
-					}
-					?>
+<?php // If the user is an Admin show the admin link at the bottom of the page
+if($user && $user['admin']) {
+?>
+					<a href="admin.php">Administration</a>
+<?php
+}
+?>
 				</div>
 			</div>
 		</div>

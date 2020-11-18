@@ -1,3 +1,4 @@
+// This is a script I got online which just animates the numbers on the homepage. A nice little touch.
 (function ($) {
 	$.fn.countTo = function (options) {
 		options = options || {};

@@ -1,7 +1,9 @@
 <?php
+// Start session and define the BLUEQUEUE constant (which simply denotes that this is a viewable page)
 session_start();
-define('BLUEQUEUE');
+define('BLUEQUEUE', true);
 
+// Obtain the user's session, or null if they're not logged in
 $user = null;
 if(isset($_SESSION['user'])) {
 	$user = $_SESSION['user'];
@@ -17,7 +19,8 @@ if(isset($_SESSION['user'])) {
 		<title>BlueQueue</title>
 		<meta name="description" content="Reserve KFC times and more with BlueQueue!">
 		<meta name="author" content="Eli Blaney & Gisselle Estevez">
-
+		
+		<!-- Bootstrap and page styling -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 		<link rel="stylesheet" href="assets/css/index.css?v=1.0.1">
 	</head>
@@ -28,6 +31,7 @@ if(isset($_SESSION['user'])) {
 				<div class="nav-buttons">
 					<a href="#" onclick="window.translate()" class="btn btn-primary" data-tln="translate">Español</a>
 <?php
+// Display log in or log out button accordingly
 if($user) {
 ?>
 					<a href="login.php?logout=true" class="btn btn-primary" data-tln="logout">Log out</a>
@@ -140,6 +144,7 @@ if($user) {
 					<a href="about.php" data-tln="about">About</a>
 					<a href="reserve.php" data-tln="reserve">Reserve</a>
 <?php
+// Only show Administration link to admins
 if($user && $user['admin']) {
 ?>
 					<a href="admin.php">Administration</a>

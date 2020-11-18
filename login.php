@@ -1,48 +1,65 @@
 <?php
+// Start session and define the BLUEQUE constant
 session_start();
 define('BLUEQUEUE');
 
+// This function redirects to another page when the user successfully authenticates
+// $follow - Whether to follow the optional 'redirect' URL parameter
+// $default_redirect - The default page to redirect to, unless there is a 'redirect' URL parameter
 function redirectAuth($follow = true, $default_redirect = "index.php") {
 	$redirect = $default_redirect;
+	// Only allow reading the 'redirect' URL parameter if it exists $follow is true
 	if($follow && isset($_GET['redirect'])) {
 		// Prevent redirecting to malicious sites
 		$redirect = trim(preg_replace("(https?:\/\/|www\.)", "", $_GET['redirect']));
 		if(!$redirect) {
+			// Invalid redirect means just use the default redirect
 			$redirect = $default_redirect;
 		}
 	}
+	// Make the redirection
 	header("Location: $redirect");
 	die("You are being redirected... Please <a href='$redirect'>click here</a> if you are not redirected in 5 seconds");
 }
 
+// When logged in, we can redirect automatically
 if(isset($_SESSION['user'])) {
+	// If application wants to log out, unset the user's session data
 	if(isset($_GET['logout']) && $_GET['logout']) {
 		unset($_SESSION['user']);
 	}
+	// Prevent following URL parameters to avoid potential infinite loops
 	redirectAuth(false);
 }
 
 $invalid_login = false;
+// Submission is when they submit the log in form
 if(isset($_POST['submit'])) {
 	require('db.php');
 	$conn = connectDB();
 
+	// Automatically convert their Net ID to an escaped uppercase string
 	$netid = strtoupper(mysqli_real_escape_string($conn, $_POST['netid']));
 
+	// Get only the login id and hashed password for the given Net ID
 	$q = "SELECT id, password FROM login WHERE netid='$netid'";
 	$result = mysqli_query($conn, $q);
 
 	if(mysqli_num_rows($result) > 0) {
+		// User exists, check password
 		$row = mysqli_fetch_assoc($result);
 		$login_id = $row['id'];
 		
 		echo $hash."<br>";
 		echo $row['password'];
+		// Checks hashed passwords
 		if(password_verify($_POST['password'], $row['password'])) {
+			// Passwords match, get user data
 			$q = "SELECT customer_id, first_name, last_name, email, active, create_date, phone, dob, id, uuid, netid, admin, address, address2, county, city, postal_code, state, country FROM customer INNER JOIN login ON customer.login_id=login.id INNER JOIN address ON customer.address_id=address.address_id WHERE login_id='$login_id'";
 			$result = mysqli_query($conn, $q);
 
 			if(mysqli_num_rows($result) > 0) {
+				// User data exists, set their session
 				$row = mysqli_fetch_assoc($result);
 
 				// Convert MySQL tinyints to PHP booleans
@@ -69,7 +86,6 @@ if(isset($_POST['submit'])) {
 }
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
 	<head>
 		<meta charset="utf-8">

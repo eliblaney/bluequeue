@@ -1,7 +1,9 @@
 <?php
+// Start the session and check user data
 session_start();
 define('BLUEQUEUE', true);
 
+// If the user isn't logged in, redirect them to the log in page
 if(!isset($_SESSION['user'])) {
 	header('Location: login.php?redirect=admin.php');
 	die('Please <a href="login.php?redirect=admin.php">click here</a> to log in.');
@@ -9,22 +11,26 @@ if(!isset($_SESSION['user'])) {
 
 $user = $_SESSION['user'];
 
-if(false && strcmp($user['admin'],'1')) {
-	// Not authorized
+// If the user isn't an administrator, redirect them to the home page
+if(!$user['admin']) {
 	header('Location: index.php');
 	die('You are not authorized to view this page.<br>Please <a href="login.php">click here</a> to return to the home page.');
 }
 
+// Connect to the database
 require('db.php');
 $conn = connectDB();
 
 if(count($_POST)) {
+	// If there is POST data, then they updated or deleted information
 	if(isset($_POST['delete'])) {
+		// Delete particular appointment
 		$id = $_POST['delete'];
 		$q = "DELETE FROM appointment WHERE appointment_id='$id'";
 		mysqli_query($conn, $q);
 	}
 	if(isset($_POST['update'])) {
+		// Update particular appointment
 		$id = $_POST['update'];
 		$customer = $_POST['customer_id'.$id];
 		$date = $_POST['appointment_date'.$id];
@@ -38,8 +44,10 @@ if(count($_POST)) {
 	}
 }
 
+// Retrieve appointments from the database
 $q = "SELECT appointment.appointment_id, appointment_date, appointment_start_time, appointment_end_time, appointment.customer_id, appointment.facility_id, appointment.class_id, appointment.court_id, first_name, last_name, facility_type, class_type, court_type FROM appointment JOIN customer ON customer.customer_id=appointment.customer_id JOIN facility ON appointment.facility_id=facility.facility_id JOIN classes ON appointment.class_id=classes.class_id JOIN court ON appointment.court_id=court.court_id ORDER BY appointment_date ASC";
 $result = mysqli_query($conn, $q);
+// Create an array of appointments
 $appointments = null;
 if(mysqli_num_rows($result) > 0) {
 	$appointments = [];
@@ -48,6 +56,11 @@ if(mysqli_num_rows($result) > 0) {
 	}
 }
 
+// This function creates an labelled input element for a particular piece of data associated with an appointment
+// $id - The appointment's id
+// $name - The name of the database column
+// $label - The user-friendly text to display in the label which represents this data
+// $value - The real database value of the data
 function buildInput($id, $name, $label, $value) {
 	if(!$value) {
 		$value = $label;
@@ -55,10 +68,13 @@ function buildInput($id, $name, $label, $value) {
 	return "<label>$label<input type='text' name='$name$id' value='$value' size='".(max(strlen($value),10))."' /></label>";
 }
 
+// This function prints out the appointment table
 function showAppointments() {
 	global $appointments;
+	// Create header row
 	echo "<table><tr><th>Customer</th><th>Date</th><th>Start Time</th><th>End Time</th><th>Facility</th><th>Class</th><th>Court</th><th>Operations</th></tr>";
 	foreach($appointments as $a) {
+		// Build inputs for each column and print them
 		$id = $a['appointment_id'];
 		$customer = buildInput($id, 'customer_id', $a['first_name'].' '.$a['last_name'], $a['customer_id']);
 		$date = buildInput($id, 'appointment_date', $a['appointment_date']);
@@ -67,18 +83,22 @@ function showAppointments() {
 		$facility = buildInput($id, 'facility_id', $a['facility_type'], $a['facility_id']);
 		$class = buildInput($id, 'class_id', $a['class_type'], $a['class_id']);
 		$court = buildInput($id, 'court_id', $a['court_type'], $a['court_id']);
+		// Create update and delete buttons
 		$buttons = "<button type='submit' name='update' value='$id' class='btn btn-info'>Update</button><button type='submit' name='delete' value='$id' class='btn btn-danger'>Delete</button>";
 		echo "<tr><td>$customer</td><td>$date</td><td>$start</td><td>$end</td><td>$facility</td><td>$class</td><td>$court</td><td>$buttons</td></tr>";
 	}
 	echo "</table>";
 }
 
+// This function prints a JavaScript list corresponding to the users who currently have appointments
 function printActiveUsers() {
 	global $conn;
+	// Get users and how many appointments they have
 	$q = "SELECT first_name, last_name, COUNT(*) AS num FROM appointment JOIN customer ON customer.customer_id=appointment.customer_id GROUP BY appointment.customer_id";
 	$result = mysqli_query($conn, $q);
 	if(mysqli_num_rows($result) > 0) {
 		while($row = mysqli_fetch_assoc($result)) {
+			// Print each user in the format ['Full Name', num_of_appointments]
 			$name = $row['first_name'].' '.$row['last_name'];
 			$num = $row['num'];
 			echo "['$name', $num],";
@@ -88,7 +108,6 @@ function printActiveUsers() {
 
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -101,25 +120,33 @@ function printActiveUsers() {
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 		<link rel="stylesheet" href="assets/css/reserve.css?v=1.0.1">
 
+		<!-- Load Google chart scripts -->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript">
+			// Load chart overhead
 			google.charts.load('current', {'packages':['corechart']});
 			google.charts.setOnLoadCallback(drawChart);
 
+			// This function draws the chart on the page at the #piechart element
 			function drawChart() {
+				// Chart data
 				var data = google.visualization.arrayToDataTable([
 					['Name', 'Upcoming Appointments'],
-<?php printActiveUsers(); ?>
-				]);
+					// Use PHP to get active users
+					<?php printActiveUsers(); ?>
+					]);
 
+				// Give the chart a title
 				var options = {
 					title: 'Upcoming Appointments'
 				};
 
+				// Create the chart
 				var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
+				// Draw the chart
 				chart.draw(data, options);
-		  }
+			}
 		</script>
 	</head>
 	<body>
@@ -141,13 +168,14 @@ if($user) {
 ?>
 				</div>
 			</div>
-
 			<div class="main-content mb-5">
 				<h1>Administration</h1>
 				<form method="POST" action="">
+					<!-- Display the appointments and allow the user to edit or delete rows -->
 					<?php showAppointments(); ?>
 				</form>
 				<h1>Active Users</h1>
+				<!-- Contains the pie chart for the active user data -->
 				<div id="piechart" style="width: 900px; height: 500px;"></div>
 			</div>
 

@@ -78,16 +78,21 @@ var lang = {
 		'translate': 'Inglés'
 	}
 };
+// This variable keeps track of which language is currently being used
 var translateIndex = 0;
 
+// These are the tags that are translatable
 var textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'li', 'span'];
 
+// This function does the translation
 window.translate = function(langCode) {
+	// If no language specified, just go to the next language in the array
 	if(langCode === undefined) {
 		var keys = Object.keys(lang);
 		translateIndex = (translateIndex + 1) % keys.length;
 		langCode = keys[translateIndex];
 	}
+	// Get each element that can be translated and do the translation
 	for(var i in textTags) {
 		var t = textTags[i];
 		var els = document.getElementsByTagName(t);

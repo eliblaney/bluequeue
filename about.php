@@ -1,7 +1,7 @@
 <?php
 //Check if the user exists in our database
 session_start();
-define('BLUEQUEUE');
+define('BLUEQUEUE', true);
 
 $user = null;
 if(isset($_SESSION['user'])) {
